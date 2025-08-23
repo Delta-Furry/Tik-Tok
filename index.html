@@ -180,6 +180,108 @@
        - "encargadas" acepta 1 a 3 nombres. Cambia la lista PERSONAS si usas nombres reales.
        - Estatus válidos: "Urgente", "Pendiente", "Cumplido".
   -->
+  <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calendario de Eventos</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+    header { background: #222; color: #fff; padding: 1rem; text-align: center; }
+    h1 { margin: 0; }
+
+    .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; padding: 1rem; }
+    .day { background: #fff; border: 1px solid #ccc; min-height: 100px; padding: 5px; position: relative; }
+    .day-number { font-weight: bold; }
+    .event { background: #4CAF50; color: #fff; font-size: 0.8rem; margin-top: 5px; padding: 3px; border-radius: 5px; cursor: pointer; }
+
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+    .modal-content { background: #fff; padding: 20px; border-radius: 10px; max-width: 400px; }
+    .close { float: right; cursor: pointer; font-size: 18px; }
+    .estatus { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📅 Calendario de Eventos</h1>
+  </header>
+
+  <section class="calendar" id="calendar"></section>
+
+  <!-- Modal para detalles -->
+  <div class="modal" id="eventModal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <h2 id="eventTitle"></h2>
+      <p><b>Fecha:</b> <span id="eventDate"></span></p>
+      <p><b>Hora:</b> <span id="eventTime"></span></p>
+      <p><b>Encargadas:</b> <span id="eventPeople"></span></p>
+      <p><b>Descripción:</b> <span id="eventDesc"></span></p>
+      <p class="estatus">Estatus: <span id="eventStatus"></span></p>
+    </div>
+  </div>
+
+  <script>
+    // Lista de chicas
+    var personas = ["Paola", "Ive", "Vivian", "Evelyn", "Adriana", "David"];
+
+    // Eventos
+    var eventos = [
+      {
+        titulo: "Revelación de la estatua",
+        fecha: "2025-08-28",
+        hora: "12:00",
+        encargados: ["Ive", "Vivian"],
+        descripcion: "Se revelará la estatua del zorro de la universidad y se cubrirá con TikToks.",
+        estatus: "Pendiente"
+      }
+    ];
+
+    // Crear calendario de agosto 2025 (ejemplo fijo)
+    var diasEnMes = 31;
+    var calendar = document.getElementById("calendar");
+
+    for (var d = 1; d <= diasEnMes; d++) {
+      var day = document.createElement("div");
+      day.classList.add("day");
+      day.innerHTML = "<div class='day-number'>" + d + "</div>";
+
+      eventos.forEach(function(evt){
+        var fecha = new Date(evt.fecha);
+        if (fecha.getDate() === d) {
+          var ev = document.createElement("div");
+          ev.classList.add("event");
+          ev.textContent = evt.titulo;
+          ev.onclick = function(){
+            document.getElementById("eventTitle").textContent = evt.titulo;
+            document.getElementById("eventDate").textContent = evt.fecha;
+            document.getElementById("eventTime").textContent = evt.hora;
+            document.getElementById("eventPeople").textContent = evt.encargados.join(", ");
+            document.getElementById("eventDesc").textContent = evt.descripcion;
+            document.getElementById("eventStatus").textContent = evt.estatus;
+            document.getElementById("eventModal").style.display = "flex";
+          }
+          day.appendChild(ev);
+        }
+      });
+
+      calendar.appendChild(day);
+    }
+
+    // Modal cerrar
+    document.getElementById("closeModal").onclick = function(){
+      document.getElementById("eventModal").style.display = "none";
+    }
+    window.onclick = function(event){
+      if (event.target == document.getElementById("eventModal")) {
+        document.getElementById("eventModal").style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
+
   <script type="application/json" id="eventData">
   {
     "personas": ["Chica 1", "Chica 2", "Chica 3", "Chica 4", "Chica 5", "Chica 6"],
