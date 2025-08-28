@@ -7,7 +7,7 @@
   <meta name="description" content="Calendario y gestor de actividades para TikTok (UNEVE – Vinculación y Difusión)" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/jpg" href="uneve.png">
+  <link rel="icon" type="image/png" href="uneve.png">
 
   <!-- FullCalendar -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css">
@@ -189,16 +189,13 @@
     <p><i>Chica trans sumamente agradecida con Lic. Toledo y Janet Zacarías por esta oportunidad. ¡Lo daré todo!</i></p>
     <button class="btn secondary" onclick="document.getElementById('secretMenu').style.display='none'">Cerrar</button>
   </div>
-<!-- ================================================================================================================================================================================================================================== -->
-<!-- ================================================================================================================================================================================================================================== -->
-<!-- ================================================================================================================================================================================================================================== -->
 
   <!-- =========================
        EVENTOS JSON (EDITABLE)
        ========================= -->
   <script type="application/json" id="eventData">
   {
-    "personas": ["Paola","Ive","Vivian","Evelyn","Adriana","David"],
+    "personas": ["Paola","Ibi","Vivian","Evelyn","Adriana","David"],
     "secciones": ["Eventos institucionales","Tips escolares","Motivacionales","Biblioteca","Actividades culturales","Opiniones / Egresados","Talleres y directores"],
     "items": [
       {
@@ -212,7 +209,7 @@
         "seEntrega": "2025-08-28",
         "encargadas": ["David"],
         "estatus": "Cumplido",
-        "nota": "Entrega entes de las 12:00 de la noche (Diferente propuesta a la de Adriana)"
+        "nota": "Entrega antes de las 12:00 de la noche (Diferente propuesta a la de Adriana)"
       },
       {
         "id": "evt-002",
@@ -225,9 +222,9 @@
         "seEntrega": "2025-08-28",
         "encargadas": ["Adriana"],
         "estatus": "Pendiente",
-        "nota": "Entrega entes de las 12:00 de la noche (Diferente propuesta a la de David)"
+        "nota": "Entrega antes de las 12:00 de la noche (Diferente propuesta a la de David)"
       },
-          {
+      {
         "id": "evt-003",
         "titulo": "Toma de fotos y detrás de cámaras",
         "seccion": "Eventos institucionales",
@@ -236,7 +233,7 @@
         "seDeja": "2025-08-27",
         "seRealiza": "2025-09-05",
         "seEntrega": "2025-09-08",
-        "encargadas": ["Paola","Ive"],
+        "encargadas": ["Paola","Ibi"],
         "estatus": "Pendiente",
         "nota": "Viviana puede apoyar de manera opcional."
       },
@@ -249,7 +246,7 @@
         "seDeja": "2025-09-08",
         "seRealiza": "2025-09-09",
         "seEntrega": "2025-09-12",
-        "encargadas": ["Paola","Ive","Viviana"],
+        "encargadas": ["Paola","Ibi","Viviana"],
         "estatus": "Pendiente",
         "nota": "Contenido debe entregarse tres días después."
       },
@@ -282,13 +279,14 @@
     ]
   }
   </script>
-<!-- ================================================================================================================================================================================================================================== -->
-<!-- ================================================================================================================================================================================================================================== -->
-<!-- ================================================================================================================================================================================================================================== -->
 
   <script>
     const $$ = (q, el=document) => el.querySelector(q);
-    const fmt = (d) => d ? new Date(d).toLocaleDateString('es-MX',{ year:'numeric', month:'short', day:'2-digit'}) : '';
+    const fmt = (d) => {
+      if(!d) return '';
+      const fixed = new Date(d + "T00:00:00"); // ✅ Corrige desfase de fecha
+      return fixed.toLocaleDateString('es-MX',{ year:'numeric', month:'short', day:'2-digit'});
+    };
 
     let data = JSON.parse($$('#eventData').textContent.trim());
     const ITEMS = data.items;
@@ -358,7 +356,7 @@
       dlg.showModal();
     }
 
-    // Buscador simple para la tabla
+    // Buscador simple
     $$('#searchInput').addEventListener('input', e => {
       const filter = e.target.value.toLowerCase();
       document.querySelectorAll('#tabla tbody tr').forEach(row => {
@@ -366,7 +364,7 @@
       });
     });
 
-    // Fondo animado con partículas
+    // Fondo animado
     const canvas = document.getElementById("bgCanvas");
     const ctx = canvas.getContext("2d");
     let particles = [];
